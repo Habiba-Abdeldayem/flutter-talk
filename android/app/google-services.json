@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "934699098461",
+    "project_id": "flutter-talk-8db27",
+    "storage_bucket": "flutter-talk-8db27.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:934699098461:android:a546a1646231fb599548b4",
+        "android_client_info": {
+          "package_name": "com.example.flutter_talk"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCLo2nRjuvrRPMqY1O71QXHRMpLpTw8DCY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
