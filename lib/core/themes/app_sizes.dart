@@ -4,5 +4,6 @@ class AppSizes {
   static const double medium = 16;
   static const double large = 24;
   static const double xl = 32;
+  static const double xxl = 40;
   static const double radius = 12; // Default border radius
 }
