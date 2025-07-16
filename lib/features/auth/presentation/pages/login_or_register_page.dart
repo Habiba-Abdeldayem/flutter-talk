@@ -21,25 +21,11 @@ class _LoginOrRegisterPageState extends State<LoginOrRegisterPage> {
   Widget build(BuildContext context) {
     if (_showLoginPage) {
       return AuthForm(
-        onButtonClick:
-            (
-              String email,
-              String password,
-              String? confirmPassword,
-              String? userName,
-            ) {},
         onTogglePage: togglePages,
         isLoginPage: true,
       );
     } else {
       return AuthForm(
-        onButtonClick:
-            (
-              String email,
-              String password,
-              String? confirmPassword,
-              String? userName,
-            ) {},
         onTogglePage: togglePages,
         isLoginPage: false,
       );

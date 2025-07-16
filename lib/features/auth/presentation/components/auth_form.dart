@@ -1,23 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_talk/core/themes/app_sizes.dart';
 import 'package:flutter_talk/core/utils/app_strings.dart';
+import 'package:flutter_talk/features/auth/data/auth_repository.dart';
 import 'package:flutter_talk/features/auth/presentation/widgets/auth_fields.dart';
 import 'package:flutter_talk/features/auth/presentation/widgets/auth_footer.dart';
 import 'package:flutter_talk/features/auth/presentation/widgets/auth_header.dart';
 
 class AuthForm extends StatefulWidget {
   final bool isLoginPage;
-  final void Function(
-    String email,
-    String password,
-    String? confirmPassword,
-    String? userName,
-  )
-  onButtonClick;
   final void Function()? onTogglePage;
   const AuthForm({
     super.key,
-    required this.onButtonClick,
     required this.onTogglePage,
     required this.isLoginPage,
   });
@@ -29,6 +22,7 @@ class AuthForm extends StatefulWidget {
 class _AuthFormState extends State<AuthForm> {
   // Create a global key that uniquely identifies the Form widget
   // and allows validation of the form.
+  final _authRepository = AuthRepository();
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _usernameController = TextEditingController();
@@ -53,18 +47,33 @@ class _AuthFormState extends State<AuthForm> {
     _confirmPasswordController.dispose();
   }
 
-  void _submit() {
+  // If you use await (like waiting for Firebase), and after that you use context, you must check if the widget is still mounted.
+  //  After await, the user might leave the screen → context becomes invalid → it crashes.
+  void _onFormSubmit() async {
     final bool isValid = _formKey.currentState?.validate() ?? false;
     setState(() {
       _isFormValid = isValid;
     });
     if (_isFormValid) {
-      widget.onButtonClick(
-        _emailController.text.trim(),
-        _passwordController.text.trim(),
-        widget.isLoginPage ? null : _confirmPasswordController.text.trim(),
-        widget.isLoginPage ? null : _usernameController.text.trim(),
-      );
+      try {
+        if (widget.isLoginPage) {
+          await _authRepository.signIn(
+            _emailController.text,
+            _passwordController.text,
+          );
+        } else {
+          await _authRepository.signUp(
+            _emailController.text,
+            _passwordController.text,
+          );
+        }
+      } catch (e) {
+        if (!mounted) return;
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(content: Text(e.toString())),
+        );
+      }
     }
 
     // formKey.currentState!.validate() checks all form fields by calling their validator functions.
@@ -119,7 +128,7 @@ class _AuthFormState extends State<AuthForm> {
                     const SizedBox(height: AppSizes.xl),
                     AuthFooter(
                       isLoginPage: widget.isLoginPage,
-                      onButtonPressed: _submit,
+                      onButtonPressed: _onFormSubmit,
                       onTogglePagePressed: widget.onTogglePage,
                     ),
                   ],
