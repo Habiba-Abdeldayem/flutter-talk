@@ -65,6 +65,7 @@ class _AuthFormState extends State<AuthForm> {
           await _authRepository.signUp(
             _emailController.text,
             _passwordController.text,
+            _usernameController.text,
           );
         }
       } catch (e) {
