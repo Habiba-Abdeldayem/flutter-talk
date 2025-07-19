@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_talk/core/constants/firestore_keys.dart';
+import 'package:flutter_talk/core/models/user_model.dart';
 import 'package:flutter_talk/core/themes/app_sizes.dart';
 
-class ContactTile extends StatelessWidget {
-  final Map<String, dynamic> chatData;
-  const ContactTile({super.key, required this.chatData});
+class UserTile extends StatelessWidget {
+  final UserModel userModel;
+  const UserTile({super.key, required this.userModel});
 
   @override
   Widget build(BuildContext context) {
@@ -25,30 +25,26 @@ class ContactTile extends StatelessWidget {
             ),
             const SizedBox(width: AppSizes.medium),
             Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "John Doe",
+                        userModel.displayName,
                         style: Theme.of(context).textTheme.titleLarge,
                       ),
+                      const SizedBox(height: AppSizes.xs),
                       Text(
-                        "12:53 PM",
-                        style: Theme.of(context).textTheme.bodySmall,
-                        // chatData[FirestoreKeys.lastMessageTimeStamp].toString(),
+                        userModel.email,
+                        style: Theme.of(context).textTheme.bodyMedium,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ],
                   ),
-                  const SizedBox(height: AppSizes.xs),
-                  Text(
-                    chatData[FirestoreKeys.lastMessage],
-                    style: Theme.of(context).textTheme.bodyMedium,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
+                  Icon(Icons.message),
                 ],
               ),
             ),

@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_talk/core/constants/firestore_keys.dart';
-import 'package:flutter_talk/features/auth/data/models/user_model.dart';
+import 'package:flutter_talk/core/models/user_model.dart';
 
 class AuthRepository {
   final FirebaseAuth _auth;
@@ -75,10 +75,6 @@ class AuthRepository {
   }
 
   Future<void> saveUserToFirestore(UserModel user) async {
-    _firestore.collection("users").doc(user.uid).set({
-      FirestoreKeys.uid: user.uid,
-      FirestoreKeys.displayName: user.displayName,
-      FirestoreKeys.email: user.email,
-    });
+    _firestore.collection(FirestoreKeys.users).doc(user.uid).set(user.toMap(user));
   }
 }

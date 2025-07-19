@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_talk/core/themes/app_sizes.dart';
 import 'package:flutter_talk/features/home/data/user_chats_service.dart';
-import 'package:flutter_talk/core/components/shared/contact_tile.dart';
+import 'package:flutter_talk/features/home/presentation/widgets/chat_item_tile.dart';
 
 class ChatList extends StatelessWidget {
   final String currentUserId;
@@ -14,16 +14,17 @@ class ChatList extends StatelessWidget {
       stream: _userChatsService.getUserChats(currentUserId),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
-          return Text("Error");
+         return const Center(child: Text("Something went wrong"));
+
         }
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return Text("Loading..");
+           return const Center(child: CircularProgressIndicator());
         }
         return Padding(
           padding: const EdgeInsets.all(AppSizes.medium),
           child: ListView(
             children: snapshot.data!
-                .map<Widget>((chatData) => ContactTile(chatData: chatData))
+                .map<Widget>((chatData) => ChatItemTile(chatData: chatData))
                 .toList(),
           ),
         );

@@ -8,4 +8,5 @@ class FirestoreKeys {
   static const displayName = "displayName";
   static const email = "email";
   static const uid = "uid";
+  static const photoUrl = "photoUrl";
 }
