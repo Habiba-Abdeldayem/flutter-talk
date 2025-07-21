@@ -11,24 +11,56 @@ class ChatList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-      stream: _userChatsService.getUserChats(currentUserId),
+      stream: _userChatsService.getUserChatsWithUsers(currentUserId),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
-         return const Center(child: Text("Something went wrong"));
-
+          print(snapshot.error.toString());
+          return const Center(child: Text("Something went wrong"));
         }
         if (snapshot.connectionState == ConnectionState.waiting) {
-           return const Center(child: CircularProgressIndicator());
+          return const Center(child: CircularProgressIndicator());
         }
+
         return Padding(
           padding: const EdgeInsets.all(AppSizes.medium),
           child: ListView(
-            children: snapshot.data!
-                .map<Widget>((chatData) => ChatItemTile(chatData: chatData))
-                .toList(),
+            children: snapshot.data!.map<Widget>((chatWithUser) {
+              return ChatItemTile(
+                chatWithUser: chatWithUser,
+                onTap: () {
+                  Navigator.pushNamed(
+                    context,
+                    '/chat',
+                    arguments: {'currentUserId':currentUserId,'otherUserId': chatWithUser.otherUser.uid},
+                  );
+                },
+              );
+            }).toList(),
           ),
         );
       },
     );
   }
 }
+
+
+              // return FutureBuilder(
+              //   future: _userService.getUserById(otherUserId),
+              //   builder: (context, userSnapshot) {
+              //     if (userSnapshot.connectionState == ConnectionState.waiting) {
+              //       return const ListTile(title: Text("Loading user..."));
+              //     }
+              //     if (!userSnapshot.hasData || userSnapshot.hasError) {
+              //       return const ListTile(title: Text("Error loading user"));
+              //     }
+
+              //     final user = userSnapshot.data!;
+              //     return ChatItemTile(
+              //       chatData: chat,
+              //       onTap: () {
+              //         Navigator.pushNamed(context, '/chat', arguments: chat);
+              //       },
+              //       name: user.displayName,
+              //     );
+              //   },
+              // );

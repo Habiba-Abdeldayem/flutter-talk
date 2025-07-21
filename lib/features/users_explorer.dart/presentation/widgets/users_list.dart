@@ -23,7 +23,21 @@ class UsersList extends StatelessWidget {
           padding: const EdgeInsets.all(AppSizes.medium),
           child: ListView(
             children: snapshot.data!
-                .map<Widget>((userData) => UserTile(userModel: userData))
+                .map<Widget>(
+                  (userData) => UserTile(
+                    userModel: userData,
+                    onTap: () {
+                      Navigator.pushNamed(
+                        context,
+                        '/chat',
+                        arguments: {
+                          'currentUserId': currentUserId,
+                          'otherUserId': userData.uid,
+                        },
+                      ); // pass user id argument, use getChat(otherUserId) method
+                    },
+                  ),
+                )
                 .toList(),
           ),
         );

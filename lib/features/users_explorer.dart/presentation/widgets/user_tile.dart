@@ -4,12 +4,13 @@ import 'package:flutter_talk/core/themes/app_sizes.dart';
 
 class UserTile extends StatelessWidget {
   final UserModel userModel;
-  const UserTile({super.key, required this.userModel});
+  final void Function()? onTap;
+  const UserTile({super.key, required this.userModel, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {},
+      onTap: onTap,
       child: Container(
         padding: EdgeInsets.all(AppSizes.medium),
         width: double.infinity,

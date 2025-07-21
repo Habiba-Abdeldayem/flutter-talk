@@ -3,13 +3,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class Message {
   final String senderId;
   final String recieverId;
-  final String text;
+  final String content;
   final Timestamp timestamp;
 
   Message({
     required this.senderId,
     required this.recieverId,
-    required this.text,
+    required this.content,
     required this.timestamp,
   });
 
@@ -18,7 +18,7 @@ class Message {
     return {
       'senderId': senderId,
       'recieverId': recieverId,
-      'content': text,
+      'content': content,
       'timestamp': timestamp,
     };
   }
@@ -27,7 +27,7 @@ class Message {
     return Message(
       senderId: map['senderId'],
       recieverId: map['recieverId'],
-      text: map['text'],
+      content: map['content'],
       timestamp: map['timestamp'],
     );
   }

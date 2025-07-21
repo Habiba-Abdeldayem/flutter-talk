@@ -1,15 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_talk/core/constants/firestore_keys.dart';
 import 'package:flutter_talk/core/themes/app_sizes.dart';
+import 'package:flutter_talk/features/chat/data/models/chat_with_user.dart';
 
 class ChatItemTile extends StatelessWidget {
-  final Map<String, dynamic> chatData;
-  const ChatItemTile({super.key, required this.chatData});
+  // final Chat chatData;
+  final ChatWithUser chatWithUser;
+  final void Function()? onTap;
+  const ChatItemTile({
+    super.key,
+    // required this.chatData,
+    required this.chatWithUser,
+    required this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {},
+      onTap: onTap,
       child: Container(
         padding: EdgeInsets.all(AppSizes.medium),
         width: double.infinity,
@@ -31,10 +38,7 @@ class ChatItemTile extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        "John Doe",
-                        style: Theme.of(context).textTheme.titleLarge,
-                      ),
+                      Text(chatWithUser.otherUser.displayName, style: Theme.of(context).textTheme.titleLarge),
                       Text(
                         "12:53 PM",
                         style: Theme.of(context).textTheme.bodySmall,
@@ -44,7 +48,7 @@ class ChatItemTile extends StatelessWidget {
                   ),
                   const SizedBox(height: AppSizes.xs),
                   Text(
-                    chatData[FirestoreKeys.lastMessage],
+                    chatWithUser.chat.lastMessage,
                     style: Theme.of(context).textTheme.bodyMedium,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,

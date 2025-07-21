@@ -17,6 +17,13 @@ class UsersService {
         );
   }
 
+  Future<UserModel?> getUserById(String id) async {
+    final doc = await _firestore.collection(FirestoreKeys.users).doc(id).get();
+    if (!doc.exists) return null;
+
+    return UserModel.fromMap(doc.data()!);
+  }
+
   Future<List<UserModel>> getUserByNameOrEmail(String query) async {
     final nameQuery = await _firestore
         .collection(FirestoreKeys.users)
@@ -30,7 +37,7 @@ class UsersService {
         .where(FirestoreKeys.displayName, isLessThanOrEqualTo: '$query\uf8ff')
         .get();
 
-// Set spread operator, takee all elements without repetition
+    // Set spread operator, takee all elements without repetition
     final allDocs = {...nameQuery.docs, ...emailQuery.docs};
 
     return allDocs.map((doc) => UserModel.fromMap(doc.data())).toList();
