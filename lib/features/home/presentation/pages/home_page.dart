@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_talk/core/components/shared/app_search_bar.dart';
+import 'package:flutter_talk/core/models/user_model.dart';
 import 'package:flutter_talk/features/auth/data/auth_repository.dart';
 import 'package:flutter_talk/features/home/presentation/widgets/chat_list.dart';
 
 class HomePage extends StatelessWidget {
-  HomePage({super.key});
+  final UserModel currentUser;
+  HomePage({super.key, required this.currentUser});
+  
   final _authRepository = AuthRepository();
   final TextEditingController controller = TextEditingController();
   @override
@@ -39,7 +42,7 @@ class HomePage extends StatelessWidget {
           ),
           Expanded(
             child: ChatList(
-              currentUserId: _authRepository.getCurrentUser()!.uid,
+              currentUserId: currentUser.uid,
             ),
           ),
         ],

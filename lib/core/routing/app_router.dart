@@ -10,7 +10,10 @@ class AppRouter {
       case '/':
         return MaterialPageRoute(builder: (context) => const AuthGate());
       case '/home':
-        return MaterialPageRoute(builder: (context) => HomePage());
+        final args = settings.arguments as Map<String, dynamic>;
+        return MaterialPageRoute(
+          builder: (context) => HomePage(currentUser: args['currentUser']),
+        );
       case '/users_explorer':
         return MaterialPageRoute(builder: (context) => UsersExplorerPage());
       case '/chat':
