@@ -32,12 +32,12 @@ class ChatMessagesService {
     if (chatDoc.exists) {
       await chatReference.update({
         FirestoreKeys.lastMessage: message.content,
-        FirestoreKeys.lastMessageTimeStamp: message.timestamp,
+        FirestoreKeys.lastMessageTime: message.timestamp,
       });
     } else {
       await chatReference.set({
         FirestoreKeys.lastMessage: message.content,
-        FirestoreKeys.lastMessageTimeStamp: message.timestamp,
+        FirestoreKeys.lastMessageTime: message.timestamp,
         FirestoreKeys.chatMembersId: [user1Id, user2Id],
         FirestoreKeys.chatId: chatId,
       });
@@ -48,5 +48,17 @@ class ChatMessagesService {
         .doc(chatId)
         .collection(FirestoreKeys.messages)
         .add(message.toMap());
+  }
+
+  Future<bool> doesChatExist(String chatId) async {
+    final chatRef = await _firestore
+        .collection(FirestoreKeys.chats)
+        .doc(chatId)
+        .get();
+
+    if (chatRef.exists) {
+      return true;
+    }
+    return false;
   }
 }

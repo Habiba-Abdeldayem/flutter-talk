@@ -32,9 +32,9 @@ class UsersList extends StatelessWidget {
                         '/chat',
                         arguments: {
                           'currentUserId': currentUserId,
-                          'otherUserId': userData.uid,
+                          'otherUser': userData,
                         },
-                      ); // pass user id argument, use getChat(otherUserId) method
+                      );
                     },
                   ),
                 )

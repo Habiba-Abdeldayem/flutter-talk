@@ -17,8 +17,8 @@ class AppRouter {
         final args = settings.arguments as Map<String, dynamic>;
         return MaterialPageRoute(
           builder: (context) => ChatPage(
-            userId1: args['currentUserId'],
-            userId2: args['otherUserId'],
+            senderId: args['currentUserId'],
+            recieverUserModel: args['otherUser'],
           ),
         );
       default:

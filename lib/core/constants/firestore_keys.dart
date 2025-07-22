@@ -5,7 +5,7 @@ class FirestoreKeys {
   static const chatId = "chatId";
   static const messages = "messages";
   static const lastMessage = "lastMessage";
-  static const lastMessageTimeStamp = "lastMessageTime";
+  static const lastMessageTime = "lastMessageTime";
   static const timestamp = "timestamp";
   static const displayName = "displayName";
   static const email = "email";

@@ -14,7 +14,6 @@ class ChatList extends StatelessWidget {
       stream: _userChatsService.getUserChatsWithUsers(currentUserId),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
-          print(snapshot.error.toString());
           return const Center(child: Text("Something went wrong"));
         }
         if (snapshot.connectionState == ConnectionState.waiting) {
@@ -24,18 +23,28 @@ class ChatList extends StatelessWidget {
         return Padding(
           padding: const EdgeInsets.all(AppSizes.medium),
           child: ListView(
-            children: snapshot.data!.map<Widget>((chatWithUser) {
-              return ChatItemTile(
-                chatWithUser: chatWithUser,
-                onTap: () {
-                  Navigator.pushNamed(
-                    context,
-                    '/chat',
-                    arguments: {'currentUserId':currentUserId,'otherUserId': chatWithUser.otherUser.uid},
+            children: snapshot.data!
+                .where(
+                  (chatWithUser) =>
+                      chatWithUser.chat.lastMessage != null &&
+                      chatWithUser.chat.lastMessageTime != null,
+                )
+                .map<Widget>((chatWithUser) {
+                  return ChatItemTile(
+                    chatWithUser: chatWithUser,
+                    onTap: () {
+                      Navigator.pushNamed(
+                        context,
+                        '/chat',
+                        arguments: {
+                          'currentUserId': currentUserId,
+                          'otherUser': chatWithUser.otherUser,
+                        },
+                      );
+                    },
                   );
-                },
-              );
-            }).toList(),
+                })
+                .toList(),
           ),
         );
       },
