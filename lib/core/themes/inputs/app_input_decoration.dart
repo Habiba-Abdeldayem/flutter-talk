@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_talk/core/themes/app_sizes.dart';
+import 'package:flutter_talk/core/themes/sizes/app_sizes.dart';
 
 /// Light InputDecorationTheme
 final inputDecorationThemeLight = InputDecorationTheme(

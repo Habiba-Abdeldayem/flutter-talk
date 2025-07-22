@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_talk/core/themes/app_sizes.dart';
+import 'package:flutter_talk/core/themes/sizes/app_sizes.dart';
 import 'package:flutter_talk/features/home/data/user_chats_service.dart';
 import 'package:flutter_talk/features/home/presentation/widgets/chat_item_tile.dart';
 

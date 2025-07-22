@@ -1,7 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_talk/core/models/user_model.dart';
 import 'package:flutter_talk/features/auth/presentation/pages/login_or_register_page.dart';
 import 'package:flutter_talk/features/home/presentation/pages/home_page.dart';
+import 'package:flutter_talk/features/navigation/pages/main_navigation_page.dart';
 
 class AuthGate extends StatelessWidget {
   const AuthGate({super.key});
@@ -13,13 +15,14 @@ class AuthGate extends StatelessWidget {
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context, snapshot) {
           // loading
-          if(snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator()); 
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
           }
           // user is logged in
-          if (snapshot.hasData) {
-            return HomePage();
-          } 
+          if (snapshot.hasData && snapshot.data != null) {
+            final userModel = UserModel.fromFirebaseUser(snapshot.data!);
+            return MainNavigationPage(currentUser: userModel);
+          }
           // user isn't logged in
           else {
             return const LoginOrRegisterPage();
