@@ -51,6 +51,7 @@ class UserChatsService {
     return _firestore
         .collection(FirestoreKeys.chats)
         .where(FirestoreKeys.chatMembersId, arrayContains: currentUserId)
+        .orderBy(FirestoreKeys.lastMessageTime, descending: true)
         .snapshots()
         .asyncMap((snapshot) async {
           final chats = snapshot.docs
@@ -68,10 +69,20 @@ class UserChatsService {
             otherUsersId.map((id) => _userService.getUserById(id)),
           );
 
-          return List.generate(
-            otherUsersId.length,
-            (i) => ChatWithUser(chat: chats[i], otherUser: otherUsers[i]!),
-          );
+          // filter any null user
+          final validChats = <ChatWithUser>[];
+          for (int i = 0; i < otherUsers.length; i++) {
+            if (otherUsers[i] != null) {
+              validChats.add(
+                ChatWithUser(chat: chats[i], otherUser: otherUsers[i]!),
+              );
+            }
+          }
+          return validChats;
+          // return List.generate(
+          //   otherUsersId.length,
+          //   (i) => ChatWithUser(chat: chats[i], otherUser: otherUsers[i]!),
+          // );
         });
   }
 }

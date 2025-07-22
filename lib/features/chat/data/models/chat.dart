@@ -4,8 +4,8 @@ import 'package:flutter_talk/core/constants/firestore_keys.dart';
 class Chat {
   final List<String> chatMembersId;
   final String chatId;
-  final String lastMessage;
-  final Timestamp lastMessageTime;
+  final String? lastMessage;
+  final Timestamp? lastMessageTime;
 
   Chat({
     required this.chatMembersId,
@@ -19,7 +19,7 @@ class Chat {
       FirestoreKeys.chatMembersId: chatMembersId,
       FirestoreKeys.chatId: chatId,
       FirestoreKeys.lastMessage: lastMessage,
-      FirestoreKeys.lastMessageTimeStamp: lastMessageTime,
+      FirestoreKeys.lastMessageTime: lastMessageTime,
     };
   }
 
@@ -28,11 +28,11 @@ class Chat {
       chatMembersId: List<String>.from(map[FirestoreKeys.chatMembersId]),
       chatId: map[FirestoreKeys.chatId],
       lastMessage: map[FirestoreKeys.lastMessage],
-      lastMessageTime: map[FirestoreKeys.lastMessageTimeStamp],
+      lastMessageTime: map[FirestoreKeys.lastMessageTime],
     );
   }
 
-   /// For updating a field
+  /// For updating a field
   Chat copyWith({
     final List<String>? chatMembersId,
     final String? chatId,

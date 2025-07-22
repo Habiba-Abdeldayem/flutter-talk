@@ -37,9 +37,25 @@ class UsersService {
         .where(FirestoreKeys.displayName, isLessThanOrEqualTo: '$query\uf8ff')
         .get();
 
-    // Set spread operator, takee all elements without repetition
+    // Set spread operator, take all elements without repetition
     final allDocs = {...nameQuery.docs, ...emailQuery.docs};
 
     return allDocs.map((doc) => UserModel.fromMap(doc.data())).toList();
   }
+
+  // Future<void> startChatIfNotExists(
+  //   String currentUserId,
+  //   String otherUserId,
+  // ) async {
+  //   final chatId = getChatRoomId(currentUserId, otherUserId);
+  //   final chatDoc = _firestore.collection(FirestoreKeys.chats).doc(chatId);
+  //   final chatSnapshot = await chatDoc.get();
+
+  //   if (!chatSnapshot.exists) {
+  //     await chatDoc.set({
+  //       FirestoreKeys.chatId: chatId,
+  //       FirestoreKeys.chatMembersId: [currentUserId, otherUserId],
+  //     });
+  //   }
+  // }
 }

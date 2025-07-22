@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_talk/core/themes/app_sizes.dart';
+import 'package:flutter_talk/core/utils/chat_helpers.dart';
 import 'package:flutter_talk/features/chat/data/models/chat_with_user.dart';
 
 class ChatItemTile extends StatelessWidget {
@@ -38,17 +39,19 @@ class ChatItemTile extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(chatWithUser.otherUser.displayName, style: Theme.of(context).textTheme.titleLarge),
                       Text(
-                        "12:53 PM",
+                        chatWithUser.otherUser.displayName,
+                        style: Theme.of(context).textTheme.titleLarge,
+                      ),
+                      Text(
+                        formatTimestamp(chatWithUser.chat.lastMessageTime!),
                         style: Theme.of(context).textTheme.bodySmall,
-                        // chatData[FirestoreKeys.lastMessageTimeStamp].toString(),
                       ),
                     ],
                   ),
                   const SizedBox(height: AppSizes.xs),
                   Text(
-                    chatWithUser.chat.lastMessage,
+                    chatWithUser.chat.lastMessage!,
                     style: Theme.of(context).textTheme.bodyMedium,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
