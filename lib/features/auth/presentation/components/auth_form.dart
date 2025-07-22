@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_talk/core/themes/app_sizes.dart';
+import 'package:flutter_talk/core/themes/sizes/app_sizes.dart';
 import 'package:flutter_talk/core/utils/app_strings.dart';
 import 'package:flutter_talk/features/auth/data/auth_repository.dart';
 import 'package:flutter_talk/features/auth/presentation/widgets/auth_fields.dart';
