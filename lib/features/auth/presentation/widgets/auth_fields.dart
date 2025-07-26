@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_talk/core/components/shared/app_text_field.dart';
+import 'package:flutter_talk/core/components/shared/app_form_field.dart';
 import 'package:flutter_talk/core/themes/sizes/app_sizes.dart';
-import 'package:flutter_talk/core/utils/app_strings.dart';
+import 'package:flutter_talk/core/constants/app_strings.dart';
 import 'package:flutter_talk/core/utils/validators.dart';
 
 class AuthFields extends StatelessWidget {
@@ -27,21 +27,21 @@ class AuthFields extends StatelessWidget {
     return Column(
       children: [
         if (!isLoginPage)
-          AppTextField(
+          AppFormField(
             controller: usernameController,
             validator: (value) => validateName(value),
             hintText: AppStrings.username,
           ),
         const SizedBox(height: AppSizes.small),
 
-        AppTextField(
+        AppFormField(
           controller: emailController,
           validator: (value) => validateEmail(value),
           hintText: AppStrings.email,
         ),
         const SizedBox(height: AppSizes.small),
 
-        AppTextField(
+        AppFormField(
           controller: passwordController,
           validator: (value) => validatePassword(value),
           hintText: AppStrings.password,
@@ -51,7 +51,7 @@ class AuthFields extends StatelessWidget {
         if (!isLoginPage) ...[
           const SizedBox(height: AppSizes.small),
 
-          AppTextField(
+          AppFormField(
             controller: confirmPasswordController,
             validator: validateConfirmPassword(passwordController.text),
             hintText: AppStrings.password,

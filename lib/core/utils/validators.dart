@@ -1,4 +1,5 @@
-import 'package:flutter_talk/core/utils/app_strings.dart';
+import 'package:flutter_talk/core/constants/app_strings.dart';
+import 'package:flutter_talk/core/constants/app_validation_messages.dart';
 
 String? validateEmail(String? value) {
   if (value == null ||
@@ -37,6 +38,27 @@ String? Function(String? value)  validateConfirmPassword(String? originalPasswor
 String? validateName(String? value) {
   if (value == null || value.trim().isEmpty) {
     return AppStrings.pleaseEnterYourName;
+  }
+  if (value.trim().length < 2) {
+    return AppValidationMessages.nameTooShort;
+  }
+  return null;
+}
+
+String? validatePhone(String? value) {
+  if (value == null || value.trim().isEmpty) {
+    return AppValidationMessages.phoneRequired;
+  }
+  final trimmed = value.trim();
+  if (!RegExp(r'^\d{10,15}$').hasMatch(trimmed)) {
+    return AppValidationMessages.enterValidPhone;
+  }
+  return null;
+}
+
+String? validateBio(String? value) {
+  if (value != null && value.length > 200) {
+    return AppValidationMessages.bioTooLong;
   }
   return null;
 }

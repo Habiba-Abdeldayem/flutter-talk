@@ -6,12 +6,16 @@ class UserModel {
   final String email;
   final String displayName;
   final String? photoUrl;
+  final String? phone;
+  final String? bio;
 
   const UserModel({
     required this.uid,
     required this.email,
     required this.displayName,
     this.photoUrl,
+    this.phone,
+    this.bio,
   });
 
   // Factory to create from firebase user
@@ -38,31 +42,39 @@ class UserModel {
       email: userData[FirestoreKeys.email] ?? '',
       displayName: userData[FirestoreKeys.displayName] ?? '',
       photoUrl: userData[FirestoreKeys.photoUrl] ?? '',
+      phone: userData[FirestoreKeys.phone],
+      bio: userData[FirestoreKeys.bio] ?? '',
     );
   }
 
-// For saving to Firestore
+  // For saving to Firestore
   Map<String, dynamic> toMap(UserModel user) {
     return {
       FirestoreKeys.uid: user.uid,
       FirestoreKeys.displayName: user.displayName,
       FirestoreKeys.email: user.email,
-      FirestoreKeys.photoUrl: user.photoUrl,
+      FirestoreKeys.photoUrl: user.photoUrl ?? '',
+      FirestoreKeys.phone: user.phone ?? '',
+      FirestoreKeys.bio: user.bio ?? '',
     };
   }
 
- /// For updating a field
+  /// For updating a field
   UserModel copyWith({
     final String? uid,
     final String? email,
     final String? displayName,
     final String? photoUrl,
+    final String? phone,
+    final String? bio,
   }) {
     return UserModel(
       uid: uid ?? this.uid,
       email: email ?? this.email,
       displayName: displayName ?? this.displayName,
       photoUrl: photoUrl ?? this.photoUrl,
+      phone: phone ?? this.phone,
+      bio: bio ?? this.bio,
     );
   }
 }

@@ -66,7 +66,7 @@ class UserChatsService {
               .toList();
 
           final otherUsers = await Future.wait(
-            otherUsersId.map((id) => _userService.getUserById(id)),
+            otherUsersId.map((id) => UserService.getUserById(id)),
           );
 
           // filter any null user

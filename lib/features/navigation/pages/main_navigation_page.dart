@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_talk/core/models/user_model.dart';
-import 'package:flutter_talk/core/utils/app_strings.dart';
-import 'package:flutter_talk/features/auth/data/auth_repository.dart';
+import 'package:flutter_talk/core/constants/app_strings.dart';
 import 'package:flutter_talk/features/home/presentation/pages/home_page.dart';
+import 'package:flutter_talk/features/profile/presentation/pages/profile_screen.dart';
 
 class MainNavigationPage extends StatefulWidget {
   final UserModel currentUser;
@@ -21,7 +21,7 @@ class _MainNavigationPageState extends State<MainNavigationPage> {
     super.initState();
     _screens = [
       HomePage(currentUser: widget.currentUser),
-      PlaceholderScreen(title: "Profile"),
+      ProfileScreen(currentUser: widget.currentUser),
       PlaceholderScreen(title: "Settings"),
     ];
   }
