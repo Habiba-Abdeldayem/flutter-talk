@@ -26,9 +26,21 @@ class AuthRepository {
         email: email,
         password: password,
       );
-      UserModel currentUser = UserModel.fromFirebaseUser(firebaseUser.user!);
-      saveUserToFirestore(currentUser);
-      return currentUser;
+
+      // 1. get UID
+      final uid = firebaseUser.user!.uid;
+
+      // 2. Load Firestore data by UID
+      final userDoc = await _firestore
+          .collection(FirestoreKeys.users)
+          .doc(uid)
+          .get();
+
+      if (userDoc.exists) {
+        return UserModel.fromMap(userDoc.data()!);
+      } else {
+        throw Exception("User data not found in Firestore");
+      }
     } on FirebaseAuthException catch (e) {
       throw Exception(_mapFirebaseCodeToMessage(e.code));
     }
@@ -43,16 +55,16 @@ class AuthRepository {
       // 1. Update the Firebase Auth displayName
       await firebaseUser.user!.updateDisplayName(name);
 
-      // 2. Reload user to get the updated data
+      // 2. reload the user before reading its data
       await firebaseUser.user!.reload();
-      User updatedUser = _auth.currentUser!;
+      final updatedUser = _auth.currentUser;
 
-      // 3. Use updatedUser to build the model
-      UserModel currentUser = UserModel.fromFirebaseUser(updatedUser);
-
-      // 4. Save to Firestore
-      await saveUserToFirestore(currentUser);
-      return currentUser;
+      UserModel tempUser = UserModel.fromFirebaseUser(updatedUser!);
+      // 3. Save it with custom data to Firestore
+      await saveUserToFirestore(
+        tempUser.copyWith(bio: '', phone: '88', displayName: name),
+      );
+      return tempUser;
     } on FirebaseAuthException catch (e) {
       throw Exception(e.code);
     }
@@ -75,6 +87,9 @@ class AuthRepository {
   }
 
   Future<void> saveUserToFirestore(UserModel user) async {
-    _firestore.collection(FirestoreKeys.users).doc(user.uid).set(user.toMap(user));
+    _firestore
+        .collection(FirestoreKeys.users)
+        .doc(user.uid)
+        .set(user.toMap(user));
   }
 }

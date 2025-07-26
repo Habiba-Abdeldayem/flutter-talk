@@ -11,4 +11,6 @@ class FirestoreKeys {
   static const email = "email";
   static const uid = "uid";
   static const photoUrl = "photoUrl";
+  static const phone = "phone";
+  static const bio = "bio";
 }

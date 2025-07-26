@@ -8,6 +8,12 @@ class AppStrings {
   static const String chats = 'Chats';
   static const String profile = 'Profile';
   static const String settings = 'Settings';
+  static const String name = 'Name';
+  static const String bio = 'Bio';
+  static const String phone = 'Phone';
+  static const String save = 'Save';
+  static const String changePhoto = 'Change Photo';
+  static const String editInfo = 'Edit Info';
   static const String confirmPassword = 'Confirm Password';
   static const String pleaseEnterYourName = 'Please enter your name';
   static const String pleaseEnterYourPassword = 'Please enter your password';
