@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_talk/core/constants/firestore_keys.dart';
 import 'package:flutter_talk/core/enums/profile_field_type.dart';
 
-class ProfileService {
+class ProfileRepository {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   Future<void> updateUserField({

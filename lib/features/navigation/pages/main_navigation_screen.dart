@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_talk/core/models/user_model.dart';
+import 'package:flutter_talk/features/user/models/user_model.dart';
 import 'package:flutter_talk/core/constants/app_strings.dart';
-import 'package:flutter_talk/features/home/presentation/pages/home_page.dart';
-import 'package:flutter_talk/features/profile/presentation/pages/profile_screen.dart';
+import 'package:flutter_talk/features/home/presentation/screens/home_screen.dart';
+import 'package:flutter_talk/features/profile/presentation/screens/profile_screen.dart';
 
 class MainNavigationPage extends StatefulWidget {
   final UserModel currentUser;

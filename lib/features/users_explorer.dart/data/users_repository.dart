@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_talk/core/constants/firestore_keys.dart';
-import 'package:flutter_talk/core/models/user_model.dart';
+import 'package:flutter_talk/features/user/models/user_model.dart';
 
-class UsersService {
+class UsersRepository {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   Stream<List<UserModel>> getOtherUsers(String currentUserId) {
@@ -42,20 +42,4 @@ class UsersService {
 
     return allDocs.map((doc) => UserModel.fromMap(doc.data())).toList();
   }
-
-  // Future<void> startChatIfNotExists(
-  //   String currentUserId,
-  //   String otherUserId,
-  // ) async {
-  //   final chatId = getChatRoomId(currentUserId, otherUserId);
-  //   final chatDoc = _firestore.collection(FirestoreKeys.chats).doc(chatId);
-  //   final chatSnapshot = await chatDoc.get();
-
-  //   if (!chatSnapshot.exists) {
-  //     await chatDoc.set({
-  //       FirestoreKeys.chatId: chatId,
-  //       FirestoreKeys.chatMembersId: [currentUserId, otherUserId],
-  //     });
-  //   }
-  // }
 }

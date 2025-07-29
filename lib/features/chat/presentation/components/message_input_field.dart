@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_talk/core/utils/chat_helpers.dart';
 import 'package:flutter_talk/features/chat/data/models/message.dart';
-import 'package:flutter_talk/features/chat/data/services/chat_messages_service.dart';
+import 'package:flutter_talk/features/chat/data/repositories/chat_messages_repo.dart';
 
 class MessageInputField extends StatefulWidget {
   final String senderId;

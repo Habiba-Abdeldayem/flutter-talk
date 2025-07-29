@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_talk/core/models/user_model.dart';
+import 'package:flutter_talk/features/user/models/user_model.dart';
 import 'package:flutter_talk/features/profile/presentation/widgets/current_user_profile.dart';
 
 class ProfileScreen extends StatelessWidget {

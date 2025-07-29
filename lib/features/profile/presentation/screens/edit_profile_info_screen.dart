@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_talk/core/components/shared/app_form_field.dart';
 import 'package:flutter_talk/core/enums/profile_field_type.dart';
-import 'package:flutter_talk/core/models/user_model.dart';
+import 'package:flutter_talk/features/user/models/user_model.dart';
 import 'package:flutter_talk/core/constants/app_strings.dart';
 import 'package:flutter_talk/core/themes/sizes/app_sizes.dart';
-import 'package:flutter_talk/features/profile/data/profile_service.dart';
+import 'package:flutter_talk/features/profile/data/profile_repository.dart';
 
 class EditProfileInfoPage extends StatefulWidget {
   final ProfileFieldType fieldType;
@@ -22,7 +22,7 @@ class EditProfileInfoPage extends StatefulWidget {
 
 class _EditProfileInfoPageState extends State<EditProfileInfoPage> {
   final TextEditingController controller = TextEditingController();
-  final ProfileService _profileService = ProfileService();
+  final ProfileRepository _profileService = ProfileRepository();
   final _formKey = GlobalKey<FormState>();
   bool _isFormValid = false;
 

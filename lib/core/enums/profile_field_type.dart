@@ -1,6 +1,6 @@
 import 'package:flutter_talk/core/constants/app_hints.dart';
 import 'package:flutter_talk/core/constants/app_strings.dart';
-import 'package:flutter_talk/core/models/user_model.dart';
+import 'package:flutter_talk/features/user/models/user_model.dart';
 import 'package:flutter_talk/core/utils/validators.dart';
 
 enum ProfileFieldType { name, phone, bio }

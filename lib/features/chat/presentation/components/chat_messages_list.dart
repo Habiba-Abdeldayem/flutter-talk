@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_talk/core/utils/chat_helpers.dart';
 import 'package:flutter_talk/features/auth/data/auth_repository.dart';
-import 'package:flutter_talk/features/chat/data/services/chat_messages_service.dart';
+import 'package:flutter_talk/features/chat/data/repositories/chat_messages_repo.dart';
 import 'package:flutter_talk/features/chat/presentation/components/message_bubble.dart';
 
 class ChatMessagesList extends StatefulWidget {

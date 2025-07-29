@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_talk/core/enums/profile_field_type.dart';
-import 'package:flutter_talk/core/models/user_model.dart';
-import 'package:flutter_talk/core/themes/sizes/app_sizes.dart';
+import 'package:flutter_talk/features/user/models/user_model.dart';
 import 'package:flutter_talk/core/constants/app_strings.dart';
-import 'package:flutter_talk/features/profile/presentation/pages/edit_profile_info_page.dart';
 
 class CurrentUserProfile extends StatelessWidget {
   final UserModel currentUser;
