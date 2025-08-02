@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_talk/features/auth/presentation/pages/auth_gate.dart';
-import 'package:flutter_talk/features/chat/presentation/pages/chat_page.dart';
-import 'package:flutter_talk/features/home/presentation/pages/home_page.dart';
-import 'package:flutter_talk/features/profile/presentation/pages/edit_profile_info_page.dart';
-import 'package:flutter_talk/features/users_explorer.dart/presentation/pages/users_explorer_page.dart';
+import 'package:flutter_talk/features/chat/presentation/screens/chat_screen.dart';
+import 'package:flutter_talk/features/home/presentation/screens/home_screen.dart';
+import 'package:flutter_talk/features/profile/presentation/screens/edit_profile_info_screen.dart';
+import 'package:flutter_talk/features/users_explorer.dart/presentation/screens/users_explorer_screen.dart';
 
 class AppRouter {
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -30,8 +30,6 @@ class AppRouter {
         return MaterialPageRoute(
           builder: (context) => EditProfileInfoPage(
             fieldType: args['fieldType'],
-            currentUser: args['currentUser'],
-       
           ),
         );
       default:

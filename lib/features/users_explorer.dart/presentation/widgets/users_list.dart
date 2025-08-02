@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_talk/core/themes/sizes/app_sizes.dart';
-import 'package:flutter_talk/features/users_explorer.dart/data/users_service.dart';
+import 'package:flutter_talk/features/users_explorer.dart/data/users_repository.dart';
 import 'package:flutter_talk/features/users_explorer.dart/presentation/widgets/user_tile.dart';
 
 class UsersList extends StatelessWidget {
   final String currentUserId;
   UsersList({super.key, required this.currentUserId});
-  final _usersService = UsersService();
+  final _usersService = UsersRepository();
 
   @override
   Widget build(BuildContext context) {

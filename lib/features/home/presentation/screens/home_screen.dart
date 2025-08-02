@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_talk/core/components/shared/app_search_bar.dart';
-import 'package:flutter_talk/core/models/user_model.dart';
+import 'package:flutter_talk/features/user/models/user_model.dart';
 import 'package:flutter_talk/features/auth/data/auth_repository.dart';
 import 'package:flutter_talk/features/home/presentation/widgets/chat_list.dart';
 

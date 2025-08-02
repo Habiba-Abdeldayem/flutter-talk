@@ -1,16 +1,18 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter_talk/core/constants/firestore_keys.dart';
-import 'package:flutter_talk/core/models/user_model.dart';
+import 'package:flutter_talk/features/user/data/user_repository.dart';
+import 'package:flutter_talk/features/user/models/user_model.dart';
 
 class AuthRepository {
   final FirebaseAuth _auth;
-  final FirebaseFirestore _firestore;
+  final UserRepository _userRepo;
   // Use injected FirebaseAuth for testability, or fallback to singleton instance
   // Use initializer list for final fields – they must be assigned before constructor body runs
-  AuthRepository({FirebaseAuth? firebaseAuth, FirebaseFirestore? firestore})
+  AuthRepository({FirebaseAuth? firebaseAuth, FirebaseFirestore? firestore, UserRepository? userRepo})
     : _auth = firebaseAuth ?? FirebaseAuth.instance,
-      _firestore = firestore ?? FirebaseFirestore.instance;
+      _userRepo = userRepo ?? UserRepository();
+
+  Stream<User?> authStateChanges() => _auth.authStateChanges();
 
   UserModel? getCurrentUser() {
     final user = _auth.currentUser;
@@ -27,17 +29,13 @@ class AuthRepository {
         password: password,
       );
 
-      // 1. get UID
       final uid = firebaseUser.user!.uid;
 
-      // 2. Load Firestore data by UID
-      final userDoc = await _firestore
-          .collection(FirestoreKeys.users)
-          .doc(uid)
-          .get();
+      // Get user data from firestore
+      final user = await _userRepo.fetchUserModelByUID(uid);
 
-      if (userDoc.exists) {
-        return UserModel.fromMap(userDoc.data()!);
+      if (user != null) {
+        return user;
       } else {
         throw Exception("User data not found in Firestore");
       }
@@ -52,18 +50,17 @@ class AuthRepository {
         email: email,
         password: password,
       );
-      // 1. Update the Firebase Auth displayName
-      await firebaseUser.user!.updateDisplayName(name);
-
-      // 2. reload the user before reading its data
-      await firebaseUser.user!.reload();
-      final updatedUser = _auth.currentUser;
-
-      UserModel tempUser = UserModel.fromFirebaseUser(updatedUser!);
-      // 3. Save it with custom data to Firestore
-      await saveUserToFirestore(
-        tempUser.copyWith(bio: '', phone: '88', displayName: name),
+      final uid = firebaseUser.user!.uid;
+      UserModel tempUser = UserModel(
+        uid: uid,
+        email: email,
+        displayName: name,
+        bio: '',
+        phone: '',
+        photoUrl: null,
       );
+
+      await _userRepo.saveUserToFirestore(tempUser);
       return tempUser;
     } on FirebaseAuthException catch (e) {
       throw Exception(e.code);
@@ -86,10 +83,5 @@ class AuthRepository {
     }
   }
 
-  Future<void> saveUserToFirestore(UserModel user) async {
-    _firestore
-        .collection(FirestoreKeys.users)
-        .doc(user.uid)
-        .set(user.toMap(user));
-  }
+
 }

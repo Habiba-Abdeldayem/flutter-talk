@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_talk/core/models/user_model.dart';
+import 'package:flutter_talk/features/user/models/user_model.dart';
 import 'package:flutter_talk/features/chat/presentation/components/chat_messages_list.dart';
 import 'package:flutter_talk/features/chat/presentation/components/message_input_field.dart';
 
