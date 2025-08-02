@@ -30,8 +30,6 @@ class AppRouter {
         return MaterialPageRoute(
           builder: (context) => EditProfileInfoPage(
             fieldType: args['fieldType'],
-            currentUser: args['currentUser'],
-       
           ),
         );
       default:

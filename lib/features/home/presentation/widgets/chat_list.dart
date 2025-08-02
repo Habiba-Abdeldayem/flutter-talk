@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_talk/core/themes/sizes/app_sizes.dart';
 import 'package:flutter_talk/features/home/data/user_chats_repo.dart';
 import 'package:flutter_talk/features/home/presentation/widgets/chat_item_tile.dart';
+import 'package:flutter_talk/features/user/providers/current_user_provider.dart';
 
-class ChatList extends StatelessWidget {
+class ChatList extends ConsumerWidget {
   final String currentUserId;
   ChatList({super.key, required this.currentUserId});
   final _userChatsService = UserChatsRepo();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final currentUserId = ref.watch(currentUserProvider).asData!.value!.uid;
     return StreamBuilder(
       stream: _userChatsService.getUserChatsWithUsers(currentUserId),
       builder: (context, snapshot) {

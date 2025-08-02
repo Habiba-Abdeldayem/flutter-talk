@@ -1,30 +1,35 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_talk/core/components/shared/app_form_field.dart';
 import 'package:flutter_talk/core/enums/profile_field_type.dart';
-import 'package:flutter_talk/features/user/models/user_model.dart';
 import 'package:flutter_talk/core/constants/app_strings.dart';
 import 'package:flutter_talk/core/themes/sizes/app_sizes.dart';
-import 'package:flutter_talk/features/profile/data/profile_repository.dart';
+import 'package:flutter_talk/features/user/providers/current_user_provider.dart';
 
-class EditProfileInfoPage extends StatefulWidget {
+class EditProfileInfoPage extends ConsumerStatefulWidget {
   final ProfileFieldType fieldType;
-  final UserModel currentUser;
-  const EditProfileInfoPage({
-    super.key,
-
-    required this.currentUser,
-    required this.fieldType,
-  });
+  const EditProfileInfoPage({super.key, required this.fieldType});
 
   @override
-  State<EditProfileInfoPage> createState() => _EditProfileInfoPageState();
+  ConsumerState<EditProfileInfoPage> createState() =>
+      _EditProfileInfoPageState();
 }
 
-class _EditProfileInfoPageState extends State<EditProfileInfoPage> {
+class _EditProfileInfoPageState extends ConsumerState<EditProfileInfoPage> {
   final TextEditingController controller = TextEditingController();
-  final ProfileRepository _profileService = ProfileRepository();
   final _formKey = GlobalKey<FormState>();
   bool _isFormValid = false;
+
+  @override
+  void initState() {
+    super.initState();
+    // Delay provider read until after build
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final currentUser = ref.read(currentUserDataProvider);
+      if (currentUser == null) return;
+      controller.text = widget.fieldType.getInitialValue(currentUser) ?? '';
+    });
+  }
 
   @override
   void dispose() {
@@ -32,14 +37,23 @@ class _EditProfileInfoPageState extends State<EditProfileInfoPage> {
     controller.dispose();
   }
 
-  void _onSave(String userId, ProfileFieldType fieldType, String newValue) {
-    _profileService.updateUserField(
-      userId: userId,
-      fieldType: fieldType,
-      newValue: newValue,
-    );
+  void _onSave(
+    String userId,
+    ProfileFieldType fieldType,
+    String newValue,
+  ) async {
     _checkFormValid();
-    //TODO update info in firestore
+    if (!_isFormValid) return;
+    await ref
+        .read(currentUserProvider.notifier)
+        .updateUserProfile(fieldType: fieldType, newValue: newValue);
+    if (!mounted) return;
+    Navigator.pop(context);
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text("✔️ Info updated successfully")));
+    // await Future.delayed(Duration(seconds: 1));
+    // if (!mounted) return;
   }
 
   void _checkFormValid() {
@@ -49,6 +63,14 @@ class _EditProfileInfoPageState extends State<EditProfileInfoPage> {
 
   @override
   Widget build(BuildContext context) {
+    final currentUser = ref.watch(currentUserDataProvider);
+
+    if (currentUser == null) {
+      return Scaffold(
+        appBar: AppBar(title: Text(AppStrings.editInfo)),
+        body: Center(child: CircularProgressIndicator()),
+      );
+    }
     return Scaffold(
       appBar: AppBar(title: Text(AppStrings.editInfo)),
       body: Padding(
@@ -60,7 +82,7 @@ class _EditProfileInfoPageState extends State<EditProfileInfoPage> {
               key: _formKey,
               child: AppFormField(
                 hintText: widget.fieldType.label,
-                value: widget.fieldType.getInitialValue(widget.currentUser),
+                value: controller.text,
                 controller: controller,
                 validator: widget.fieldType.validator,
               ),
@@ -75,11 +97,8 @@ class _EditProfileInfoPageState extends State<EditProfileInfoPage> {
 
             SizedBox(height: AppSizes.xl),
             ElevatedButton(
-              onPressed: () => _onSave(
-                widget.currentUser.uid,
-                widget.fieldType,
-                controller.text,
-              ),
+              onPressed: () =>
+                  _onSave(currentUser.uid, widget.fieldType, controller.text),
               style: ElevatedButton.styleFrom(
                 backgroundColor: Theme.of(context).colorScheme.primary,
                 padding: EdgeInsets.all(AppSizes.medium),

@@ -1,22 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_talk/core/enums/profile_field_type.dart';
 import 'package:flutter_talk/features/user/models/user_model.dart';
 import 'package:flutter_talk/core/constants/app_strings.dart';
+import 'package:flutter_talk/features/user/providers/current_user_provider.dart';
 
-class CurrentUserProfile extends StatelessWidget {
-  final UserModel currentUser;
-  const CurrentUserProfile({super.key, required this.currentUser});
+class CurrentUserProfile extends ConsumerWidget {
+  const CurrentUserProfile({super.key});
 
   void _onTileTap(BuildContext context, ProfileFieldType fieldType) {
     Navigator.pushNamed(
       context,
       '/edit_profile_info',
-      arguments: {'fieldType': fieldType, 'currentUser': currentUser},
+      arguments: {'fieldType': fieldType},
     );
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final currentUser = ref.watch(currentUserDataProvider);
+      if (currentUser == null) {
+      return const Center(child: CircularProgressIndicator());
+    }
     return ListView(
       children: [
         Stack(
@@ -59,12 +64,12 @@ class CurrentUserProfile extends StatelessWidget {
             const SizedBox(height: 20),
           ],
         ),
-        _buildInfoList(context),
+        _buildInfoList(context, currentUser),
       ],
     );
   }
 
-  Widget _buildInfoList(BuildContext context) {
+  Widget _buildInfoList(BuildContext context, UserModel currentUser) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Column(
@@ -75,7 +80,6 @@ class CurrentUserProfile extends StatelessWidget {
             ProfileFieldType.name,
             currentUser.displayName,
           ),
-          // TODO: modify UserModel to store phone, bio
           _infoTile(
             context,
             Icon(Icons.phone),
@@ -86,8 +90,7 @@ class CurrentUserProfile extends StatelessWidget {
             context,
             Icon(Icons.info),
             ProfileFieldType.bio,
-
-            "Flutter Developer",
+            currentUser.bio
           ),
         ],
       ),
@@ -105,7 +108,6 @@ class CurrentUserProfile extends StatelessWidget {
       title: Text(fieldType.name),
       subtitle: Text(
         value ?? 'Tap to add your ${fieldType.name.toLowerCase()}',
-        // : value,
       ),
       trailing: Icon(Icons.arrow_forward_ios_rounded),
       onTap: () => _onTileTap(context, fieldType),

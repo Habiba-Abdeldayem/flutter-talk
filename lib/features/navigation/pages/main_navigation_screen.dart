@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_talk/features/home/providers/selected_tab_provider.dart';
 import 'package:flutter_talk/features/user/models/user_model.dart';
 import 'package:flutter_talk/core/constants/app_strings.dart';
 import 'package:flutter_talk/features/home/presentation/screens/home_screen.dart';
 import 'package:flutter_talk/features/profile/presentation/screens/profile_screen.dart';
 
-class MainNavigationPage extends StatefulWidget {
+class MainNavigationPage extends ConsumerStatefulWidget {
   final UserModel currentUser;
   const MainNavigationPage({super.key, required this.currentUser});
 
   @override
-  State<MainNavigationPage> createState() => _MainNavigationPageState();
+  ConsumerState<MainNavigationPage> createState() => _MainNavigationPageState();
 }
 
-class _MainNavigationPageState extends State<MainNavigationPage> {
-  int _selectedIndex = 0;
+class _MainNavigationPageState extends ConsumerState<MainNavigationPage> {
   late final List<Widget> _screens;
 
   @override
@@ -28,11 +29,14 @@ class _MainNavigationPageState extends State<MainNavigationPage> {
 
   @override
   Widget build(BuildContext context) {
+    final selectedIndex = ref.watch(selectedTabProvider);
     return Scaffold(
-      body: IndexedStack(index: _selectedIndex, children: _screens),
+      body: IndexedStack(index: selectedIndex, children: _screens),
       bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _selectedIndex,
-        onTap: (newIndex) => setState(() => _selectedIndex = newIndex),
+        currentIndex: selectedIndex,
+        onTap: (newIndex) => setState(
+          () => ref.read(selectedTabProvider.notifier).state = newIndex,
+        ),
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.chat),

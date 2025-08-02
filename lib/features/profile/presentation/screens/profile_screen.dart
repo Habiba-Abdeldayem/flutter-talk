@@ -8,9 +8,6 @@ class ProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: CurrentUserProfile(currentUser: currentUser)
-      //  CurrentUserProfile(currentUser: currentUser)
-    );
+    return Scaffold(body: CurrentUserProfile());
   }
 }
