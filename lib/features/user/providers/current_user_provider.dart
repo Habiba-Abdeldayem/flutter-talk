@@ -6,12 +6,13 @@ import 'package:flutter_talk/features/user/data/user_repository.dart';
 import 'package:flutter_talk/features/user/models/user_model.dart';
 import 'package:flutter_talk/features/auth/providers/auth_state_provider.dart';
 
+final userRepositoryProvider = Provider<UserRepository>((ref) {
+  return UserRepository();
+});
+
 final currentUserDataProvider = Provider<UserModel?>((ref) {
   final userAsync = ref.watch(currentUserProvider);
- return userAsync.maybeWhen(
-    data: (user) => user,
-    orElse: () => null,
-  );
+  return userAsync.maybeWhen(data: (user) => user, orElse: () => null);
 });
 
 final currentUserProvider =
@@ -20,10 +21,9 @@ final currentUserProvider =
     );
 
 class CurrentUserNotifier extends AutoDisposeAsyncNotifier<UserModel?> {
-  final UserRepository userRepo = UserRepository();
-
   @override
   FutureOr<UserModel?> build() async {
+    final UserRepository userRepo = ref.watch(userRepositoryProvider);
     final firebaseUser = await ref.watch(authStateProvider.future);
 
     if (firebaseUser == null) return null;
@@ -34,6 +34,7 @@ class CurrentUserNotifier extends AutoDisposeAsyncNotifier<UserModel?> {
     required ProfileFieldType fieldType,
     required String newValue,
   }) async {
+    final UserRepository userRepo = ref.read(userRepositoryProvider);
     final firebaseUser = await ref.read(authStateProvider.future);
     if (firebaseUser == null) return;
     await userRepo.updateUserField(
@@ -46,6 +47,8 @@ class CurrentUserNotifier extends AutoDisposeAsyncNotifier<UserModel?> {
   }
 
   Future<void> reload() async {
+    final UserRepository userRepo = ref.read(userRepositoryProvider);
+
     state = const AsyncLoading();
 
     state = await AsyncValue.guard(() async {

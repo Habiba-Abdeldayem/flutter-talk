@@ -15,7 +15,7 @@ class AuthStateHandler extends ConsumerWidget {
 
     return userState.when(
         error: (error, stackTrace) {
-          return AppErrorWidget(error.toString());
+          return AppErrorWidget(error: error.toString());
         },
         loading: () {
           return AppLoadingWidget();
