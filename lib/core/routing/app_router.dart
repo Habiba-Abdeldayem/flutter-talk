@@ -20,17 +20,13 @@ class AppRouter {
       case '/chat':
         final args = settings.arguments as Map<String, dynamic>;
         return MaterialPageRoute(
-          builder: (context) => ChatPage(
-            senderId: args['currentUserId'],
-            recieverUserModel: args['otherUser'],
-          ),
+          builder: (context) => ChatPage(recieverUserModel: args['otherUser']),
         );
       case '/edit_profile_info':
         final args = settings.arguments as Map<String, dynamic>;
         return MaterialPageRoute(
-          builder: (context) => EditProfileInfoPage(
-            fieldType: args['fieldType'],
-          ),
+          builder: (context) =>
+              EditProfileInfoPage(fieldType: args['fieldType']),
         );
       default:
         return MaterialPageRoute(builder: (context) => const AuthGate());

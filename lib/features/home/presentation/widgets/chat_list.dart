@@ -1,32 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_talk/core/components/shared/app_error_widget.dart';
+import 'package:flutter_talk/core/components/shared/app_loading_widget.dart';
 import 'package:flutter_talk/core/themes/sizes/app_sizes.dart';
-import 'package:flutter_talk/features/home/data/user_chats_repo.dart';
+import 'package:flutter_talk/features/chat/providers/chat_providers.dart';
 import 'package:flutter_talk/features/home/presentation/widgets/chat_item_tile.dart';
 import 'package:flutter_talk/features/user/providers/current_user_provider.dart';
 
 class ChatList extends ConsumerWidget {
-  final String currentUserId;
-  ChatList({super.key, required this.currentUserId});
-  final _userChatsService = UserChatsRepo();
+  const ChatList({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final currentUserId = ref.watch(currentUserProvider).asData!.value!.uid;
-    return StreamBuilder(
-      stream: _userChatsService.getUserChatsWithUsers(currentUserId),
-      builder: (context, snapshot) {
-        if (snapshot.hasError) {
-          return const Center(child: Text("Something went wrong"));
-        }
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
-        }
-
+    final userChatsWithUsers = ref.watch(
+      userChatsWithUsersProvider(currentUserId),
+    );
+    return userChatsWithUsers.when(
+      error: (error, stackTrace) => AppErrorWidget(error: error.toString()),
+      loading: () => AppLoadingWidget(),
+      data: (data) {
         return Padding(
           padding: const EdgeInsets.all(AppSizes.medium),
           child: ListView(
-            children: snapshot.data!
+            children: data
                 .where(
                   (chatWithUser) =>
                       chatWithUser.chat.lastMessage != null &&
@@ -54,25 +51,3 @@ class ChatList extends ConsumerWidget {
     );
   }
 }
-
-
-              // return FutureBuilder(
-              //   future: _userService.getUserById(otherUserId),
-              //   builder: (context, userSnapshot) {
-              //     if (userSnapshot.connectionState == ConnectionState.waiting) {
-              //       return const ListTile(title: Text("Loading user..."));
-              //     }
-              //     if (!userSnapshot.hasData || userSnapshot.hasError) {
-              //       return const ListTile(title: Text("Error loading user"));
-              //     }
-
-              //     final user = userSnapshot.data!;
-              //     return ChatItemTile(
-              //       chatData: chat,
-              //       onTap: () {
-              //         Navigator.pushNamed(context, '/chat', arguments: chat);
-              //       },
-              //       name: user.displayName,
-              //     );
-              //   },
-              // );

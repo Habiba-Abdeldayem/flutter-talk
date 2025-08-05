@@ -1,58 +1,46 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_talk/core/utils/chat_helpers.dart';
 import 'package:flutter_talk/features/chat/data/models/message.dart';
-import 'package:flutter_talk/features/chat/data/repositories/chat_messages_repo.dart';
+import 'package:flutter_talk/features/chat/providers/send_message_notifier.dart';
+import 'package:flutter_talk/features/user/providers/current_user_provider.dart';
 
-class MessageInputField extends StatefulWidget {
-  final String senderId;
+class MessageInputField extends ConsumerStatefulWidget {
   final String recieverId;
-  const MessageInputField({
-    super.key,
-    required this.senderId,
-    required this.recieverId,
-  });
+  const MessageInputField({super.key, required this.recieverId});
 
   @override
-  State<MessageInputField> createState() => _MessageInputFieldState();
+  ConsumerState<MessageInputField> createState() => _MessageInputFieldState();
 }
 
-class _MessageInputFieldState extends State<MessageInputField> {
+class _MessageInputFieldState extends ConsumerState<MessageInputField> {
   final TextEditingController controller = TextEditingController();
-  final ChatMessagesService _chatMessagesService = ChatMessagesService();
-  late final String chatId;
   bool isSending = false;
-
-  @override
-  void initState() {
-    chatId = getChatRoomId(widget.senderId, widget.recieverId);
-    super.initState();
-  }
-
   @override
   void dispose() {
     super.dispose();
     controller.dispose();
   }
 
-  void _sendMessage() async {
+  void _sendMessage(String senderId) async {
+      final text = controller.text.trim();
+  if (text.isEmpty) return;
+    Message message = Message(
+      senderId: senderId,
+      recieverId: widget.recieverId,
+      content: controller.text,
+      timestamp: Timestamp.now(),
+    );
+final chatId = getChatRoomId(senderId, widget.recieverId);
+
     setState(() {
       isSending = true;
     });
-    if (controller.text.trim().isNotEmpty) {
-      await _chatMessagesService.sendMessage(
-        chatId,
-        widget.senderId,
-        widget.recieverId,
-        Message(
-          senderId: widget.senderId,
-          recieverId: widget.recieverId,
-          content: controller.text,
-          timestamp: Timestamp.now(),
-        ),
-      );
+      await ref
+          .read(sendMessageNotifierProvider.notifier)
+          .sendMessage(chatId, senderId, widget.recieverId, message);
       controller.clear();
-    }
     setState(() {
       isSending = false;
     });
@@ -60,6 +48,9 @@ class _MessageInputFieldState extends State<MessageInputField> {
 
   @override
   Widget build(BuildContext context) {
+    final currentUserAsync = ref.watch(currentUserProvider);
+if (!currentUserAsync.hasValue) return SizedBox();
+final currentUser = currentUserAsync.value!;
     return Row(
       children: [
         Expanded(
@@ -69,7 +60,7 @@ class _MessageInputFieldState extends State<MessageInputField> {
           ),
         ),
         InkWell(
-          onTap: _sendMessage,
+          onTap: () => _sendMessage(currentUser.uid),
           borderRadius: BorderRadius.circular(100),
           child: Container(
             margin: EdgeInsets.all(8),

@@ -1,5 +1,9 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_talk/core/components/shared/app_search_bar.dart';
+import 'package:flutter_talk/core/constants/app_hints.dart';
+import 'package:flutter_talk/core/constants/app_strings.dart';
 import 'package:flutter_talk/features/user/models/user_model.dart';
 import 'package:flutter_talk/features/auth/data/auth_repository.dart';
 import 'package:flutter_talk/features/home/presentation/widgets/chat_list.dart';
@@ -14,7 +18,7 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Home", style: Theme.of(context).textTheme.displayLarge),
+        title: Text(AppStrings.chats, style: Theme.of(context).textTheme.displayLarge),
         centerTitle: true,
         actions: [
           IconButton(
@@ -36,13 +40,12 @@ class HomePage extends StatelessWidget {
       body: Column(
         children: [
           AppSearchBar(
-            hintText: 'Search',
-            searchByName: (value) => print(value),
+            hintText: AppHints.searchHint,
+            searchByName: (value) => log(value),
             controller: controller,
           ),
           Expanded(
-            child: ChatList(
-              currentUserId: currentUser.uid,
+            child:const ChatList(
             ),
           ),
         ],

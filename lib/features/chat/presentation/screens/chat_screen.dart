@@ -4,11 +4,9 @@ import 'package:flutter_talk/features/chat/presentation/components/chat_messages
 import 'package:flutter_talk/features/chat/presentation/components/message_input_field.dart';
 
 class ChatPage extends StatelessWidget {
-  final String senderId;
   final UserModel recieverUserModel;
   const ChatPage({
     super.key,
-    required this.senderId,
     required this.recieverUserModel,
   });
 
@@ -20,12 +18,10 @@ class ChatPage extends StatelessWidget {
         children: [
           Expanded(
             child: ChatMessagesList(
-              senderId: senderId,
               recieverId: recieverUserModel.uid,
             ),
           ),
           MessageInputField(
-            senderId: senderId,
             recieverId: recieverUserModel.uid,
           ),
         ],
