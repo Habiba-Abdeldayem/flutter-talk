@@ -1,62 +1,81 @@
-// import 'package:flutter/material.dart';
-// import 'package:flutter_talk/core/models/user_model.dart';
-// import 'package:flutter_talk/core/themes/sizes/app_sizes.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_talk/features/profile/presentation/widgets/profile_avatar_section.dart';
+import 'package:flutter_talk/core/constants/app_strings.dart';
 
-// class CurrentUserProfile extends StatelessWidget {
-//   final UserModel currentUser;
-//   const CurrentUserProfile({super.key, required this.currentUser});
+class OtherUserProfile extends ConsumerWidget {
+  const OtherUserProfile({super.key});
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return ListView(
-//       children: [
-//         Stack(
-//           clipBehavior: Clip.none,
-//           children: [
-//             Container(height: 180, color: Colors.teal[100]),
-//             Positioned(
-//               top: 100,
-//               left: MediaQuery.of(context).size.width / 2 - 50,
-//               bottom: -80,
-//               child: CircleAvatar(
-//                 radius: 50,
-//                 backgroundColor: Colors.white,
-//                 child: CircleAvatar(
-//                   radius: 45,
-//                   backgroundImage: AssetImage(
-//                     "lib/core/images/user_avatar.png",
-//                   ),
-//                 ),
-//               ),
-//             ),
-//           ],
-//         ),
-//         const SizedBox(height: 60),
-//         Column(
-//           children: [
-//             Text(
-//               currentUser.displayName,
-//               style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-//             ),
-//             Text("Bonie@k.com"),
-//             Text("Joined on Aug 3, 2021"),
-//             const SizedBox(height: 20),
-//             // const SizedBox(height: 10),
-//             Divider(height: 0.5),
-//             Padding(
-//               padding: const EdgeInsets.all(8.0),
-//               child: Column(children: []),
-//             ),
-//           ],
-//         ),
-//         Column(
-//           children: [
-//             ListTile(leading: Icon(Icons.edit), title: Text("Edit Profile")),
-//             ListTile(leading: Icon(Icons.settings), title: Text("Settings")),
-//             ListTile(leading: Icon(Icons.logout), title: Text("Logout")),
-//           ],
-//         ),
-//       ],
-//     );
-//   }
-// }
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    // final otherUserAsyncValue = ref.watch(otherUserProvider);
+    return ListView(
+      children: [
+        ProfileAvatarSection(),
+        const SizedBox(height: 60),
+        Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [const SizedBox(height: 20)],
+        ),
+        Padding(
+          padding: const EdgeInsets.all(24.0),
+          child: _buildInfoList(context),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildInfoList(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        children: [
+          ElevatedButton(
+            child: Padding(
+              padding: const EdgeInsets.all(18.0),
+              child: Row(
+                // mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  // _otherUserInfo(context, userName, userEmail, userPhone, userBio),
+                  Icon(Icons.logout), Text(AppStrings.chats)],
+              ),
+            ),
+            onPressed: () {},
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _otherUserInfo(
+    BuildContext context,
+    String userName,
+    String userEmail,
+    String userPhone,
+    String userBio,
+  ) {
+    return Column(children: [
+      Text(userName, style: Theme.of(context).textTheme.headlineMedium,),
+      Text(userEmail),
+      Text(userPhone),
+      Text(userBio),
+    ]);
+  }
+
+  // Widget _otherUserButton(
+  //   BuildContext context,
+  //   Icon leadingIcon,
+  //   ProfileFieldType fieldType,
+  //   String? value,
+  // ) {
+  //   return ListTile(
+  //     leading: leadingIcon,
+  //     title: Text(fieldType.name),
+  //     subtitle: Text(
+  //       value ?? 'Tap to add your ${fieldType.name.toLowerCase()}',
+  //     ),
+  //     trailing: Icon(Icons.arrow_forward_ios_rounded),
+  //     onTap: () => _onTileTap(context, fieldType),
+  //   );
+  // }
+}

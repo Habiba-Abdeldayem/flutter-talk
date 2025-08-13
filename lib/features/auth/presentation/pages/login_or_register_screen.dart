@@ -20,14 +20,18 @@ class _LoginOrRegisterPageState extends State<LoginOrRegisterPage> {
   @override
   Widget build(BuildContext context) {
     if (_showLoginPage) {
-      return AuthForm(
-        onTogglePage: togglePages,
-        isLoginPage: true,
+      return Center(
+        child: AuthForm(
+          onTogglePage: togglePages,
+          isLoginPage: true,
+        ),
       );
     } else {
-      return AuthForm(
-        onTogglePage: togglePages,
-        isLoginPage: false,
+      return Center(
+        child: AuthForm(
+          onTogglePage: togglePages,
+          isLoginPage: false,
+        ),
       );
     }
   }
