@@ -1,47 +1,48 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_talk/core/components/shared/app_error_widget.dart';
+import 'package:flutter_talk/core/components/shared/app_loading_widget.dart';
+import 'package:flutter_talk/core/constants/app_strings.dart';
 import 'package:flutter_talk/core/themes/sizes/app_sizes.dart';
-import 'package:flutter_talk/features/users_explorer.dart/data/users_repository.dart';
+import 'package:flutter_talk/features/user/providers/other_users_provider.dart';
 import 'package:flutter_talk/features/users_explorer.dart/presentation/widgets/user_tile.dart';
 
-class UsersList extends StatelessWidget {
-  final String currentUserId;
-  UsersList({super.key, required this.currentUserId});
-  final _usersService = UsersRepository();
+class UsersList extends ConsumerWidget {
+  const UsersList({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return StreamBuilder(
-      stream: _usersService.getOtherUsers(currentUserId),
-      builder: (context, snapshot) {
-        if (snapshot.hasError) {
-          return const Center(child: Text("Something went wrong"));
-        }
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
+  Widget build(BuildContext context, WidgetRef ref) {
+    final otherUsersStream = ref.watch(otherUsersProvider);
+    return otherUsersStream.when(
+      data: (users) {
+        if (users.isEmpty) {
+          return const Center(child: Text(AppStrings.noUsersFound));
         }
         return Padding(
           padding: const EdgeInsets.all(AppSizes.medium),
-          child: ListView(
-            children: snapshot.data!
-                .map<Widget>(
-                  (userData) => UserTile(
-                    userModel: userData,
-                    onTap: () {
-                      Navigator.pushNamed(
-                        context,
-                        '/chat',
-                        arguments: {
-                          'currentUserId': currentUserId,
-                          'otherUser': userData,
-                        },
-                      );
+          child: ListView.builder(
+            itemCount: users.length,
+            itemBuilder: (context, index) {
+              return UserTile(
+                userModel: users[index],
+                onTap: () {
+                  Navigator.pushNamed(
+                    context,
+                    '/chat',
+                    arguments: {
+                      'otherUser': users[index],
                     },
-                  ),
-                )
-                .toList(),
+                  );
+                },
+              );
+            },
           ),
         );
       },
+      error: (error, stackTrace) {
+        return const AppErrorWidget(error: AppStrings.somethingWentWrong);
+      },
+      loading: () => const AppLoadingWidget(),
     );
   }
 }

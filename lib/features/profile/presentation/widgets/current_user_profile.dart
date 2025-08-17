@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_talk/core/enums/profile_field_type.dart';
+import 'package:flutter_talk/features/profile/presentation/widgets/profile_avatar_section.dart';
 import 'package:flutter_talk/features/user/models/user_model.dart';
 import 'package:flutter_talk/core/constants/app_strings.dart';
 import 'package:flutter_talk/features/user/providers/current_user_provider.dart';
@@ -19,46 +20,24 @@ class CurrentUserProfile extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final currentUser = ref.watch(currentUserDataProvider);
-      if (currentUser == null) {
+    if (currentUser == null) {
       return const Center(child: CircularProgressIndicator());
     }
     return ListView(
       children: [
-        Stack(
-          clipBehavior: Clip.none,
-          children: [
-            Container(height: 180, color: Colors.teal[100]),
-            Positioned(
-              top: 100,
-              left: MediaQuery.of(context).size.width / 2 - 50,
-              bottom: -80,
-              child: InkWell(
-                onTap: () {
-                  // TODO show image/image picker
-                },
-                child: CircleAvatar(
-                  radius: 50,
-                  backgroundColor: Colors.white,
-                  child: CircleAvatar(
-                    radius: 45,
-                    backgroundImage: AssetImage(
-                      "lib/core/images/user_avatar.png",
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
+        ProfileAvatarSection(),
         const SizedBox(height: 60),
         Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
-              AppStrings.changePhoto,
-              style: TextStyle(
-                color: Theme.of(context).colorScheme.primary,
-                fontWeight: FontWeight.bold,
+            TextButton(
+              onPressed: () {},
+              child: Text(
+                AppStrings.changePhoto,
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.primary,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
             const SizedBox(height: 20),
@@ -90,7 +69,7 @@ class CurrentUserProfile extends ConsumerWidget {
             context,
             Icon(Icons.info),
             ProfileFieldType.bio,
-            currentUser.bio
+            currentUser.bio,
           ),
         ],
       ),

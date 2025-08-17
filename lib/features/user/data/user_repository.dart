@@ -6,7 +6,7 @@ import 'package:flutter_talk/features/user/models/user_model.dart';
 class UserRepository {
   final FirebaseFirestore _firestore;
   UserRepository({FirebaseFirestore? firestore})
-      : _firestore = firestore ?? FirebaseFirestore.instance;
+    : _firestore = firestore ?? FirebaseFirestore.instance;
 
   Future<UserModel?> fetchUserModelByUID(String uid) async {
     final doc = await _firestore.collection(FirestoreKeys.users).doc(uid).get();
@@ -18,6 +18,18 @@ class UserRepository {
     }
   }
 
+  Stream<UserModel?> fetchUserStreamByUID(String uid) {
+    return _firestore.collection(FirestoreKeys.users).doc(uid).snapshots().map((
+      doc,
+    ) {
+      if (doc.exists) {
+        return UserModel.fromMap(doc.data()!);
+      } else {
+        return null;
+      }
+    });
+  }
+
   Future<void> saveUserToFirestore(UserModel user) async {
     await _firestore
         .collection(FirestoreKeys.users)
@@ -25,7 +37,7 @@ class UserRepository {
         .set(user.toMap(user));
   }
 
-    Future<void> updateUserField({
+  Future<void> updateUserField({
     required String userId,
     required ProfileFieldType fieldType,
     required String newValue,
@@ -36,16 +48,52 @@ class UserRepository {
     });
   }
 
-
-String _getFieldNameInFirestore(ProfileFieldType fieldType) {
-  switch (fieldType) {
-    case ProfileFieldType.name:
-      return FirestoreKeys.displayName;
-    case ProfileFieldType.phone:
-      return FirestoreKeys.phone;
-    case ProfileFieldType.bio:
-      return FirestoreKeys.bio;
+  Stream<List<UserModel>> fetchAllUsersExcluding(String currentUserId) {
+    return _firestore
+        .collection(FirestoreKeys.users)
+        .where(FirestoreKeys.uid, isNotEqualTo: currentUserId)
+        .snapshots()
+        .map(
+          (snapshot) => snapshot.docs
+              .map((doc) => UserModel.fromMap(doc.data()))
+              .toList(),
+        );
   }
-}
 
+  Future<UserModel?> getUserById(String id) async {
+    final doc = await _firestore.collection(FirestoreKeys.users).doc(id).get();
+    if (!doc.exists) return null;
+
+    return UserModel.fromMap(doc.data()!);
+  }
+
+  Future<List<UserModel>> getUserByNameOrEmail(String query) async {
+    final nameQuery = await _firestore
+        .collection(FirestoreKeys.users)
+        .where(FirestoreKeys.displayName, isGreaterThanOrEqualTo: query)
+        .where(FirestoreKeys.displayName, isLessThanOrEqualTo: '$query\uf8ff')
+        .get();
+
+    final emailQuery = await _firestore
+        .collection(FirestoreKeys.users)
+        .where(FirestoreKeys.email, isGreaterThan: query)
+        .where(FirestoreKeys.displayName, isLessThanOrEqualTo: '$query\uf8ff')
+        .get();
+
+    // Set spread operator, take all elements without repetition
+    final allDocs = {...nameQuery.docs, ...emailQuery.docs};
+
+    return allDocs.map((doc) => UserModel.fromMap(doc.data())).toList();
+  }
+
+  String _getFieldNameInFirestore(ProfileFieldType fieldType) {
+    switch (fieldType) {
+      case ProfileFieldType.name:
+        return FirestoreKeys.displayName;
+      case ProfileFieldType.phone:
+        return FirestoreKeys.phone;
+      case ProfileFieldType.bio:
+        return FirestoreKeys.bio;
+    }
+  }
 }
