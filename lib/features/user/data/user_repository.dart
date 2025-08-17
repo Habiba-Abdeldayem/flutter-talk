@@ -6,7 +6,7 @@ import 'package:flutter_talk/features/user/models/user_model.dart';
 class UserRepository {
   final FirebaseFirestore _firestore;
   UserRepository({FirebaseFirestore? firestore})
-      : _firestore = firestore ?? FirebaseFirestore.instance;
+    : _firestore = firestore ?? FirebaseFirestore.instance;
 
   Future<UserModel?> fetchUserModelByUID(String uid) async {
     final doc = await _firestore.collection(FirestoreKeys.users).doc(uid).get();
@@ -18,6 +18,18 @@ class UserRepository {
     }
   }
 
+  Stream<UserModel?> fetchUserStreamByUID(String uid) {
+    return _firestore.collection(FirestoreKeys.users).doc(uid).snapshots().map((
+      doc,
+    ) {
+      if (doc.exists) {
+        return UserModel.fromMap(doc.data()!);
+      } else {
+        return null;
+      }
+    });
+  }
+
   Future<void> saveUserToFirestore(UserModel user) async {
     await _firestore
         .collection(FirestoreKeys.users)
@@ -25,7 +37,7 @@ class UserRepository {
         .set(user.toMap(user));
   }
 
-    Future<void> updateUserField({
+  Future<void> updateUserField({
     required String userId,
     required ProfileFieldType fieldType,
     required String newValue,
@@ -73,16 +85,15 @@ class UserRepository {
 
     return allDocs.map((doc) => UserModel.fromMap(doc.data())).toList();
   }
-  
-String _getFieldNameInFirestore(ProfileFieldType fieldType) {
-  switch (fieldType) {
-    case ProfileFieldType.name:
-      return FirestoreKeys.displayName;
-    case ProfileFieldType.phone:
-      return FirestoreKeys.phone;
-    case ProfileFieldType.bio:
-      return FirestoreKeys.bio;
-  }
-}
 
+  String _getFieldNameInFirestore(ProfileFieldType fieldType) {
+    switch (fieldType) {
+      case ProfileFieldType.name:
+        return FirestoreKeys.displayName;
+      case ProfileFieldType.phone:
+        return FirestoreKeys.phone;
+      case ProfileFieldType.bio:
+        return FirestoreKeys.bio;
+    }
+  }
 }

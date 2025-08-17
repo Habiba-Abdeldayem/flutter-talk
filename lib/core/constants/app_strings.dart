@@ -23,4 +23,5 @@ class AppStrings {
   static const String somethingWentWrong = 'Something went wrong. Please try again.';
   static const String noUserDataFound = 'No user data found';
   static const String noUsersFound = 'No users found';
+  static const String sendMessage = 'Send Message';
 }

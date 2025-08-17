@@ -8,9 +8,12 @@ class AuthRepository {
   final UserRepository _userRepo;
   // Use injected FirebaseAuth for testability, or fallback to singleton instance
   // Use initializer list for final fields – they must be assigned before constructor body runs
-  AuthRepository({FirebaseAuth? firebaseAuth, FirebaseFirestore? firestore, UserRepository? userRepo})
-    : _auth = firebaseAuth ?? FirebaseAuth.instance,
-      _userRepo = userRepo ?? UserRepository();
+  AuthRepository({
+    FirebaseAuth? firebaseAuth,
+    FirebaseFirestore? firestore,
+    UserRepository? userRepo,
+  }) : _auth = firebaseAuth ?? FirebaseAuth.instance,
+       _userRepo = userRepo ?? UserRepository();
 
   Stream<User?> authStateChanges() => _auth.authStateChanges();
 
@@ -55,8 +58,8 @@ class AuthRepository {
         uid: uid,
         email: email,
         displayName: name,
-        bio: '',
-        phone: '',
+        bio: null,
+        phone: null,
         photoUrl: null,
       );
 
@@ -82,6 +85,4 @@ class AuthRepository {
         return 'Something went wrong. Please try again.';
     }
   }
-
-
 }

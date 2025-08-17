@@ -43,7 +43,7 @@ class UserModel {
       displayName: userData[FirestoreKeys.displayName] ?? '',
       photoUrl: userData[FirestoreKeys.photoUrl] ?? '',
       phone: userData[FirestoreKeys.phone],
-      bio: userData[FirestoreKeys.bio] ?? '',
+      bio: userData[FirestoreKeys.bio],
     );
   }
 
@@ -54,8 +54,8 @@ class UserModel {
       FirestoreKeys.displayName: user.displayName,
       FirestoreKeys.email: user.email,
       FirestoreKeys.photoUrl: user.photoUrl ?? '',
-      FirestoreKeys.phone: user.phone ?? '',
-      FirestoreKeys.bio: user.bio ?? '',
+      FirestoreKeys.phone: user.phone,
+      FirestoreKeys.bio: user.bio,
     };
   }
 

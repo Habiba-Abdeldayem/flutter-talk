@@ -6,7 +6,12 @@ final otherUsersProvider = StreamProvider.autoDispose<List<UserModel>>((ref) {
   final userRepo = ref.watch(userRepositoryProvider);
   final currentUser = ref.watch(currentUserDataProvider);
   if (currentUser == null) {
-    return const Stream.empty(); 
+    return const Stream.empty();
   }
-    return userRepo.fetchAllUsersExcluding(currentUser.uid);
+  return userRepo.fetchAllUsersExcluding(currentUser.uid);
+});
+
+final userByIdProvider = StreamProvider.family<UserModel?, String>((ref, uid) {
+  final userRepo = ref.watch(userRepositoryProvider);
+  return userRepo.fetchUserStreamByUID(uid);
 });

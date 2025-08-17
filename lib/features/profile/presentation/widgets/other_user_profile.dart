@@ -1,81 +1,109 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_talk/core/components/shared/app_error_widget.dart';
+import 'package:flutter_talk/core/components/shared/app_loading_widget.dart';
+import 'package:flutter_talk/core/components/shared/profile_action_button.dart';
+import 'package:flutter_talk/core/themes/sizes/app_sizes.dart';
 import 'package:flutter_talk/features/profile/presentation/widgets/profile_avatar_section.dart';
-import 'package:flutter_talk/core/constants/app_strings.dart';
+import 'package:flutter_talk/features/user/models/user_model.dart';
+import 'package:flutter_talk/features/user/providers/other_users_provider.dart';
 
 class OtherUserProfile extends ConsumerWidget {
-  const OtherUserProfile({super.key});
+  final String profileId;
+  const OtherUserProfile({super.key, required this.profileId});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // final otherUserAsyncValue = ref.watch(otherUserProvider);
-    return ListView(
-      children: [
-        ProfileAvatarSection(),
-        const SizedBox(height: 60),
-        Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [const SizedBox(height: 20)],
-        ),
-        Padding(
-          padding: const EdgeInsets.all(24.0),
-          child: _buildInfoList(context),
-        ),
-      ],
-    );
-  }
+    final otherUserAsyncValue = ref.watch(userByIdProvider(profileId));
 
-  Widget _buildInfoList(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Column(
-        children: [
-          ElevatedButton(
-            child: Padding(
-              padding: const EdgeInsets.all(18.0),
-              child: Row(
-                // mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  // _otherUserInfo(context, userName, userEmail, userPhone, userBio),
-                  Icon(Icons.logout), Text(AppStrings.chats)],
-              ),
+    return Scaffold(
+      body: otherUserAsyncValue.when(
+        loading: () => const AppLoadingWidget(),
+        error: (error, stackTrace) => const AppErrorWidget(),
+        data: (userData) {
+          if (userData == null) {
+            return AppErrorWidget(error: "No user data found");
+          }
+          return SingleChildScrollView(
+            child: Column(
+              children: [
+                ProfileAvatarSection(),
+                const SizedBox(height: 50),
+
+                Text(
+                  userData.displayName,
+                  style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                // const SizedBox(height: 8),
+                // Text(
+                //   userData.bio ?? "No bio yet",
+                //   style: Theme.of(
+                //     context,
+                //   ).textTheme.bodyMedium?.copyWith(color: Colors.grey[700]),
+                //   textAlign: TextAlign.center,
+                // ),
+                const SizedBox(height: 24),
+
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ProfileActionButton(
+                      icon: Icons.block,
+                      label: "Block",
+                      onPressed: () {},
+                    ),
+                    const SizedBox(width: 24),
+                    ProfileActionButton(
+                      icon: Icons.message,
+                      label: "Message",
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                    ),
+                  ],
+                ),
+
+                const SizedBox(height: 32),
+
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: Card(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    elevation: 3,
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Column(
+                        children: [
+                          _buildInfoTile(Icons.email, userData.email),
+                          const Divider(),
+                          _buildInfoTile(Icons.phone, userData.phone ?? "N/A"),
+                          const Divider(),
+                          _buildInfoTile(Icons.info, userData.bio ?? "No bio"),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 32),
+              ],
             ),
-            onPressed: () {},
-          ),
-        ],
+          );
+        },
       ),
     );
   }
 
-  Widget _otherUserInfo(
-    BuildContext context,
-    String userName,
-    String userEmail,
-    String userPhone,
-    String userBio,
-  ) {
-    return Column(children: [
-      Text(userName, style: Theme.of(context).textTheme.headlineMedium,),
-      Text(userEmail),
-      Text(userPhone),
-      Text(userBio),
-    ]);
+  Widget _buildInfoTile(IconData icon, String text) {
+    return Row(
+      children: [
+        Icon(icon, color: Colors.teal),
+        const SizedBox(width: 12),
+        Expanded(child: Text(text, style: const TextStyle(fontSize: 16))),
+      ],
+    );
   }
-
-  // Widget _otherUserButton(
-  //   BuildContext context,
-  //   Icon leadingIcon,
-  //   ProfileFieldType fieldType,
-  //   String? value,
-  // ) {
-  //   return ListTile(
-  //     leading: leadingIcon,
-  //     title: Text(fieldType.name),
-  //     subtitle: Text(
-  //       value ?? 'Tap to add your ${fieldType.name.toLowerCase()}',
-  //     ),
-  //     trailing: Icon(Icons.arrow_forward_ios_rounded),
-  //     onTap: () => _onTileTap(context, fieldType),
-  //   );
-  // }
 }
