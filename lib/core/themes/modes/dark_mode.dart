@@ -7,10 +7,10 @@ import 'package:flutter_talk/core/themes/text/app_text_theme.dart';
 ThemeData darkMode = ThemeData(
   brightness: Brightness.dark,
   colorScheme: darkColorScheme,
-  scaffoldBackgroundColor: Color(0xFF1B2B27),
-  cardColor: Color(0xFF1E1E1E),
+  scaffoldBackgroundColor: darkColorScheme.surface,
+  cardColor: const Color(0xFF1E1E1E),
   inputDecorationTheme: inputDecorationThemeDark,
   bottomNavigationBarTheme: darkBottomNavBarTheme,
-  textTheme: appTextTheme,
+  textTheme: buildTextTheme(darkColorScheme),
   useMaterial3: true,
 );

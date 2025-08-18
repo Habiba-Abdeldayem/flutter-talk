@@ -3,9 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_talk/core/components/shared/app_error_widget.dart';
 import 'package:flutter_talk/core/components/shared/app_loading_widget.dart';
 import 'package:flutter_talk/core/components/shared/profile_action_button.dart';
-import 'package:flutter_talk/core/themes/sizes/app_sizes.dart';
 import 'package:flutter_talk/features/profile/presentation/widgets/profile_avatar_section.dart';
-import 'package:flutter_talk/features/user/models/user_model.dart';
 import 'package:flutter_talk/features/user/providers/other_users_provider.dart';
 
 class OtherUserProfile extends ConsumerWidget {

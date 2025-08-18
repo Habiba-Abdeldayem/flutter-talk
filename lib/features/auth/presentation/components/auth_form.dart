@@ -102,6 +102,7 @@ class _AuthFormState extends State<AuthForm> {
               borderRadius: BorderRadius.circular(20),
             ),
             margin: const EdgeInsets.all(AppSizes.xxl),
+            color: Theme.of(context).colorScheme.surfaceContainerHighest,
             child: Padding(
               padding: const EdgeInsets.all(AppSizes.xl),
               child: Form(

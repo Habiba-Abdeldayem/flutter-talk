@@ -3,7 +3,9 @@ import 'package:flutter_talk/features/auth/presentation/pages/auth_gate.dart';
 import 'package:flutter_talk/features/chat/presentation/screens/chat_screen.dart';
 import 'package:flutter_talk/features/home/presentation/screens/home_screen.dart';
 import 'package:flutter_talk/features/profile/presentation/screens/edit_profile_info_screen.dart';
+import 'package:flutter_talk/features/profile/presentation/screens/profile_screen.dart';
 import 'package:flutter_talk/features/profile/presentation/widgets/other_user_profile.dart';
+import 'package:flutter_talk/features/settings/presentation/screens/settings_screen.dart';
 import 'package:flutter_talk/features/users_explorer.dart/presentation/screens/users_explorer_screen.dart';
 
 class AppRouter {
@@ -35,6 +37,12 @@ class AppRouter {
           builder: (context) =>
               OtherUserProfile(profileId: args['profileId']),
         );
+      case '/settings':
+        return MaterialPageRoute(
+          builder: (context) =>SettingsScreen(),);
+      case '/profile':
+        return MaterialPageRoute(
+          builder: (context) =>ProfileScreen(),);
       default:
         return MaterialPageRoute(builder: (context) => const AuthGate());
     }

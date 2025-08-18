@@ -37,15 +37,33 @@ class MessageBubble extends StatelessWidget {
         ),
         color: isCurrentUser
             ? Theme.of(context).colorScheme.primary
-            : Theme.of(context).colorScheme.surface,
+            : Theme.of(context).colorScheme.secondaryContainer,
       ),
       child: Column(
         crossAxisAlignment: isCurrentUser
             ? CrossAxisAlignment.end
             : CrossAxisAlignment.start,
         children: [
-          Text(message.content),
-          Text(formatTimestamp(message.timestamp)),
+          Text(
+            message.content,
+            style: TextStyle(
+              color: isCurrentUser
+                  ? Theme.of(context).colorScheme.onPrimary
+                  : Theme.of(context).colorScheme.onSecondaryContainer, 
+            ),
+          ),
+          Text(
+            formatTimestamp(message.timestamp),
+            style: TextStyle(
+              fontSize: 12,
+              color: isCurrentUser
+                  ? Theme.of(
+                      context,
+                    ).colorScheme.onPrimary.withValues(alpha: 0.7)
+                  : Theme.of(context).colorScheme.onSecondaryContainer
+                        .withValues(alpha: 0.7), 
+            ),
+          ),
         ],
       ),
     );

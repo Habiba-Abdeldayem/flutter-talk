@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_talk/features/home/providers/selected_tab_provider.dart';
+import 'package:flutter_talk/features/settings/presentation/screens/settings_screen.dart';
 import 'package:flutter_talk/features/user/models/user_model.dart';
 import 'package:flutter_talk/core/constants/app_strings.dart';
 import 'package:flutter_talk/features/home/presentation/screens/home_screen.dart';
@@ -22,8 +23,8 @@ class _MainNavigationPageState extends ConsumerState<MainNavigationPage> {
     super.initState();
     _screens = [
       HomePage(currentUser: widget.currentUser),
-      ProfileScreen(currentUser: widget.currentUser),
-      PlaceholderScreen(title: "Settings"),
+      ProfileScreen(),
+      SettingsScreen(),
     ];
   }
 

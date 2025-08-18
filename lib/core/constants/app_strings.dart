@@ -1,12 +1,14 @@
 class AppStrings {
   static const String welcome = 'Welcome';
   static const String login = 'Login';
+  static const String logout = 'Logout';
   static const String signUp = 'Sign Up';
   static const String username = 'Username';
   static const String email = 'Email';
   static const String password = 'Password';
   static const String chats = 'Chats';
   static const String profile = 'Profile';
+  static const String editProfile = 'Edit Profile';
   static const String settings = 'Settings';
   static const String name = 'Name';
   static const String bio = 'Bio';
@@ -14,6 +16,9 @@ class AppStrings {
   static const String save = 'Save';
   static const String changePhoto = 'Change Photo';
   static const String editInfo = 'Edit Info';
+  static const String privacy = 'Privacy';
+  static const String darkMode = 'Dark Mode';
+  static const String notifications = 'Notifications';
   static const String confirmPassword = 'Confirm Password';
   static const String pleaseEnterYourName = 'Please enter your name';
   static const String pleaseEnterYourPassword = 'Please enter your password';

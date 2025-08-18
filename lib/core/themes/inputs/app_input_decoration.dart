@@ -1,40 +1,49 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_talk/core/themes/colors/app_colors.dart';
 import 'package:flutter_talk/core/themes/sizes/app_sizes.dart';
 
-/// Light InputDecorationTheme
+// Light Mode Input Decoration
 final inputDecorationThemeLight = InputDecorationTheme(
   filled: true,
   fillColor: Colors.white,
-  hintStyle: TextStyle(color: Color(0xFF9E9E9E)),
+  hintStyle: TextStyle(color: Colors.grey[600]),
   enabledBorder: OutlineInputBorder(
-    borderSide: BorderSide(color: Color(0xFFB0BEC5)),
-    borderRadius: BorderRadius.circular(12),
-  ),
-  focusedBorder: OutlineInputBorder(
-    borderSide: BorderSide(color: Colors.black),
-    borderRadius: BorderRadius.circular(12),
-  ),
-  errorBorder: OutlineInputBorder(
-    borderSide: BorderSide(color: Colors.red),
-    borderRadius: BorderRadius.circular(8),
-  ),
-  focusedErrorBorder: OutlineInputBorder(
-    borderSide: BorderSide(color: Colors.red, width: 2),
-    borderRadius: BorderRadius.circular(8),
-  ),
-);
-
-/// Dark InputDecorationTheme
-final inputDecorationThemeDark = InputDecorationTheme(
-  filled: true,
-  fillColor: Color(0xFF1E1E1E),
-  hintStyle: TextStyle(color: Color(0xFFBDBDBD)),
-  enabledBorder: OutlineInputBorder(
-    borderSide: BorderSide(color: Color(0xFF455A64)),
+    borderSide: BorderSide(color: lightColorScheme.secondary.withOpacity(0.3)),
     borderRadius: BorderRadius.circular(AppSizes.radius),
   ),
   focusedBorder: OutlineInputBorder(
-    borderSide: BorderSide(color: Color(0xFF80CBC4)), // primary
+    borderSide: BorderSide(color: lightColorScheme.primary, width: 2),
+    borderRadius: BorderRadius.circular(AppSizes.radius),
+  ),
+  errorBorder: OutlineInputBorder(
+    borderSide: BorderSide(color: lightColorScheme.error),
+    borderRadius: BorderRadius.circular(AppSizes.radius),
+  ),
+  focusedErrorBorder: OutlineInputBorder(
+    borderSide: BorderSide(color: lightColorScheme.error, width: 2),
+    borderRadius: BorderRadius.circular(AppSizes.radius),
+  ),
+);
+
+// Dark Mode Input Decoration
+final inputDecorationThemeDark = InputDecorationTheme(
+  filled: true,
+  fillColor: const Color(0xFF1E1E1E),
+  hintStyle: TextStyle(color: Colors.grey[400]),
+  enabledBorder: OutlineInputBorder(
+    borderSide: BorderSide(color: darkColorScheme.secondary.withOpacity(0.3)),
+    borderRadius: BorderRadius.circular(AppSizes.radius),
+  ),
+  focusedBorder: OutlineInputBorder(
+    borderSide: BorderSide(color: darkColorScheme.primary, width: 2),
+    borderRadius: BorderRadius.circular(AppSizes.radius),
+  ),
+  errorBorder: OutlineInputBorder(
+    borderSide: BorderSide(color: darkColorScheme.error),
+    borderRadius: BorderRadius.circular(AppSizes.radius),
+  ),
+  focusedErrorBorder: OutlineInputBorder(
+    borderSide: BorderSide(color: darkColorScheme.error, width: 2),
     borderRadius: BorderRadius.circular(AppSizes.radius),
   ),
 );
