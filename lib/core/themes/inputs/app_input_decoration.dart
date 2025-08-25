@@ -8,7 +8,7 @@ final inputDecorationThemeLight = InputDecorationTheme(
   fillColor: Colors.white,
   hintStyle: TextStyle(color: Colors.grey[600]),
   enabledBorder: OutlineInputBorder(
-    borderSide: BorderSide(color: lightColorScheme.secondary.withOpacity(0.3)),
+    borderSide: BorderSide(color: lightColorScheme.secondary.withValues(alpha:0.3)),
     borderRadius: BorderRadius.circular(AppSizes.radius),
   ),
   focusedBorder: OutlineInputBorder(
@@ -31,7 +31,7 @@ final inputDecorationThemeDark = InputDecorationTheme(
   fillColor: const Color(0xFF1E1E1E),
   hintStyle: TextStyle(color: Colors.grey[400]),
   enabledBorder: OutlineInputBorder(
-    borderSide: BorderSide(color: darkColorScheme.secondary.withOpacity(0.3)),
+    borderSide: BorderSide(color: darkColorScheme.secondary.withValues(alpha:0.3)),
     borderRadius: BorderRadius.circular(AppSizes.radius),
   ),
   focusedBorder: OutlineInputBorder(
